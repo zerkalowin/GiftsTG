@@ -1,9 +1,8 @@
 name: Generate and Deploy
 
 on:
-  push:
-    branches:
-      - master
+  schedule:
+    - cron: '25 20 * * *'  # Every day at 8:25 PM
   workflow_dispatch:
 
 jobs:
