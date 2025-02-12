@@ -1,4 +1,5 @@
 import asyncio
+import shutil
 from json import dumps
 from os import getenv
 from pathlib import Path
@@ -8,16 +9,20 @@ from aiogram.types import Gift, Gifts
 
 from models import SavedGift
 
+BASE_OUTPUT_DIR = Path("/tmp/temp/gifts")
+IMAGES_DIR = BASE_OUTPUT_DIR.joinpath("images")
+
+def prepare_dirs():
+    for output_dir in (BASE_OUTPUT_DIR, IMAGES_DIR):
+        if not output_dir.exists():
+            output_dir.mkdir()
+    for filename in ("index.html", "style.css"):
+        shutil.copyfile(src=f"web/{filename}", dst=BASE_OUTPUT_DIR.joinpath(f"{filename}"))
+
 
 async def download_gifts(
         bot: Bot,
-        base_output_dir: Path,
 ):
-    images_dir = base_output_dir.joinpath("images")
-    for output_dir in (base_output_dir, images_dir):
-        if not output_dir.exists():
-            output_dir.mkdir()
-
     data = dict()
 
     available_gifts: Gifts = await bot.get_available_gifts()
@@ -33,17 +38,18 @@ async def download_gifts(
         file_name = f"{gift.id}.jpg"
         await bot.download(
             file=gift.sticker.thumbnail.file_id,
-            destination=images_dir.joinpath(file_name).absolute(),
+            destination=IMAGES_DIR.joinpath(file_name).absolute(),
         )
         print(f"Downloaded {index + 1}/{len(available_gifts.gifts)}")
         await asyncio.sleep(1)
-    with open(base_output_dir.joinpath("data.json"), "w") as f:
+    with open(BASE_OUTPUT_DIR.joinpath("data.json"), "w") as f:
         f.write(dumps(list(data.values())))
 
 
 async def main():
+    prepare_dirs()
     async with Bot(token=getenv("BOT_TOKEN")) as bot:
-        await download_gifts(bot, base_output_dir=Path("/tmp/gifts"))
+        await download_gifts(bot)
 
 
 if __name__ == '__main__':
