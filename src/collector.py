@@ -9,7 +9,7 @@ from aiogram.types import Gift, Gifts
 
 from models import SavedGift
 
-BASE_OUTPUT_DIR = Path("/tmp/temp/gifts")
+BASE_OUTPUT_DIR = Path("/tmp/gifts")
 IMAGES_DIR = BASE_OUTPUT_DIR.joinpath("images")
 
 def prepare_dirs():
