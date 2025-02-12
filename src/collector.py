@@ -32,18 +32,18 @@ def update_date():
 async def download_gifts(
         bot: Bot,
 ):
-    data = dict()
+    data = list()
 
     available_gifts: Gifts = await bot.get_available_gifts()
     gift: Gift
     for index, gift in enumerate(available_gifts.gifts):
-        data[gift.id] = {
+        data.append({
             "id": gift.id,
             "price": gift.star_count,
             "upgrade_price": gift.upgrade_star_count,
             "remaining_count": gift.remaining_count,
             "total_count": gift.total_count,
-        }
+        })
         file_name = f"{gift.id}.jpg"
         await bot.download(
             file=gift.sticker.thumbnail.file_id,
@@ -52,7 +52,7 @@ async def download_gifts(
         print(f"Downloaded {index + 1}/{len(available_gifts.gifts)}")
         await asyncio.sleep(1)
     with open(BASE_OUTPUT_DIR.joinpath("data.json"), "w") as f:
-        f.write(dumps(list(data.values())))
+        f.write(dumps(data))
 
 
 async def main():
