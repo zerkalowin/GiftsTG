@@ -1,11 +1,11 @@
 import asyncio
 from json import dumps
+from os import getenv
 from pathlib import Path
 
 from aiogram import Bot
 from aiogram.types import Gift, Gifts
 
-from config_reader import AppConfig, get_config
 from models import SavedGift
 
 
@@ -42,10 +42,8 @@ async def download_gifts(
 
 
 async def main():
-    app_config = get_config(AppConfig, root_key="app")
-
-    async with Bot(token=app_config.bot_token.get_secret_value()) as bot:
-        await download_gifts(bot, base_output_dir=app_config.gifts_dir)
+    async with Bot(token=getenv("BOT_TOKEN")) as bot:
+        await download_gifts(bot, base_output_dir=Path("/tmp/temp/gifts"))
 
 
 if __name__ == '__main__':
