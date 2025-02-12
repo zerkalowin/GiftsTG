@@ -8,8 +8,6 @@ from pathlib import Path
 from aiogram import Bot
 from aiogram.types import Gift, Gifts
 
-from models import SavedGift
-
 BASE_OUTPUT_DIR = Path("/tmp/gifts")
 IMAGES_DIR = BASE_OUTPUT_DIR.joinpath("images")
 
@@ -39,13 +37,13 @@ async def download_gifts(
     available_gifts: Gifts = await bot.get_available_gifts()
     gift: Gift
     for index, gift in enumerate(available_gifts.gifts):
-        data[gift.id] = SavedGift(
-            id=gift.id,
-            price=gift.star_count,
-            upgrade_price=gift.upgrade_star_count,
-            remaining_count=gift.remaining_count,
-            total_count=gift.total_count,
-        ).to_dict()
+        data[gift.id] = {
+            "id": gift.id,
+            "price": gift.star_count,
+            "upgrade_price": gift.upgrade_star_count,
+            "remaining_count": gift.remaining_count,
+            "total_count": gift.total_count,
+        }
         file_name = f"{gift.id}.jpg"
         await bot.download(
             file=gift.sticker.thumbnail.file_id,
