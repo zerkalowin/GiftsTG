@@ -1,5 +1,6 @@
 import asyncio
 import shutil
+from datetime import datetime, timezone
 from json import dumps
 from os import getenv
 from pathlib import Path
@@ -18,6 +19,16 @@ def prepare_dirs():
             output_dir.mkdir()
     for filename in ("index.html", "style.css"):
         shutil.copyfile(src=f"web/{filename}", dst=BASE_OUTPUT_DIR.joinpath(f"{filename}"))
+
+def update_date():
+    html_file = BASE_OUTPUT_DIR.joinpath("index.html")
+    current_date = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d")
+    with open(html_file, "r") as f:
+        content = f.read()
+
+    updated_content = content.replace("%DATE%", current_date)
+    with open(html_file, "w") as f:
+        f.write(updated_content)
 
 
 async def download_gifts(
