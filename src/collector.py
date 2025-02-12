@@ -20,7 +20,7 @@ def prepare_dirs():
 
 def update_date():
     html_file = BASE_OUTPUT_DIR.joinpath("index.html")
-    current_date = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M")
+    current_date = datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     with open(html_file, "r") as f:
         content = f.read()
 
