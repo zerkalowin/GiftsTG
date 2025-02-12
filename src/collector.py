@@ -59,6 +59,7 @@ async def download_gifts(
 
 async def main():
     prepare_dirs()
+    update_date()
     async with Bot(token=getenv("BOT_TOKEN")) as bot:
         await download_gifts(bot)
 
