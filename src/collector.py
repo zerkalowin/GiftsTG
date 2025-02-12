@@ -43,7 +43,7 @@ async def download_gifts(
 
 async def main():
     async with Bot(token=getenv("BOT_TOKEN")) as bot:
-        await download_gifts(bot, base_output_dir=Path("/tmp/temp/gifts"))
+        await download_gifts(bot, base_output_dir=Path("/tmp/gifts"))
 
 
 if __name__ == '__main__':
