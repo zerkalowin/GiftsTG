@@ -1,0 +1,52 @@
+name: Generate and Deploy
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  uv-build:
+    name: python
+    runs-on: ubuntu-latest
+    env:
+      # Define environment variable that your script will use
+      BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          # Install a specific version of uv.
+          version: "0.5.31"
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      - name: "Run script"
+        run: "uv run src/collector.py"
+
+      - name: Configure Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Create and switch to orphan branch
+        run: |
+          git checkout --orphan web
+          git rm -rf .
+
+      - name: Add generated files
+        run: |
+          mv /tmp/gifts/* .
+          git add .
+
+      - name: Commit and push
+        run: |
+          git commit -m "Update web files"
+          git push origin web --force
