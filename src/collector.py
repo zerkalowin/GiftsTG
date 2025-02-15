@@ -8,7 +8,7 @@ from pathlib import Path
 from aiogram import Bot
 from aiogram.types import Gift, Gifts
 
-BASE_OUTPUT_DIR = Path("/Users/groosha/PycharmProjects/telegram-gifts-catalogue/website2")
+BASE_OUTPUT_DIR = Path("/tmp/gifts")
 IMAGES_DIR = BASE_OUTPUT_DIR.joinpath("images")
 
 def prepare_dirs():
