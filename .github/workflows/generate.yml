@@ -2,7 +2,7 @@ name: Generate and Deploy
 
 on:
   schedule:
-    - cron: '25 8,20 * * *'  # Every day at 8:25 AM/PM
+    - cron: '25 */4 * * *'  # 25th minute of every 4th hour
   workflow_dispatch:
 
 jobs:
