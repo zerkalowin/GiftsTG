@@ -1,1 +1,1 @@
-# telegram-gifts-catalogue
+# GiftsTG
